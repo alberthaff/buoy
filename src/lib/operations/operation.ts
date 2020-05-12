@@ -1,5 +1,6 @@
 import { Buoy } from '../buoy';
 import { isFunction } from 'ngx-plumber';
+import { print } from 'graphql/language/printer';
 
 export class Operation {
     protected _apolloOperation;
@@ -63,8 +64,18 @@ export class Operation {
         return variables;
     }
 
+    /**
+     * Get the query for the operation.
+     */
     protected getQuery() {
         return this._query;
+    }
+
+    /**
+     * Get the fetch policy for the operation.
+     */
+    protected getFetchPolicy() {
+        return typeof this._options.fetchPolicy !== 'undefined' ? this._options.fetchPolicy : 'cache-first';
     }
 
     /**
@@ -72,5 +83,23 @@ export class Operation {
      */
     protected handleOperationName() {
         return this._query; // TODO
+    }
+
+    protected operationError(error) {
+        throw new Error(
+            `
+Buoy encountered an error.
+Operation #${this._id} is invalid: ${error.message}, on line ${error.locations[0].line}:${error.locations[0].column}
+
+Operation:
+${print(this.getQuery())}
+
+Variables:
+${JSON.stringify(this.getVariables())}
+
+Raw variables (no middleware or extensions):
+${JSON.stringify(this._variables)}
+`
+        );
     }
 }

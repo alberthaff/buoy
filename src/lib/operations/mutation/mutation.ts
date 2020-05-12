@@ -23,7 +23,13 @@ export class Mutation extends Operation {
             this._buoy.apollo.mutate({
                 mutation: this.getQuery(),
                 variables: this.getVariables(),
-                errorPolicy: 'all'
+                errorPolicy: 'all',
+                update: (cache, mutationResult) => {
+                    console.log('MUTA UPD', cache, mutationResult);
+                    if (typeof this._options.update !== 'undefined') {
+                        this._options.update(cache, mutationResult, this.getQuery());
+                    }
+                }
             }).toPromise().then(
                 (response) => {
 
@@ -33,10 +39,7 @@ export class Mutation extends Operation {
 
                     for (const error of response.errors) {
                         if (error.extensions.category === 'graphql') {
-                            throw new Error(
-                                '[Buoy :: GraphQL error]: ${error.message}, on line ' +
-                                `${error.locations[0].line}:${error.locations[0].column}.`,
-                            );
+                            this.operationError(error);
                         }
                     }
 

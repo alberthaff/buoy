@@ -85,7 +85,7 @@ export class Pagination {
     public readPaginationFromResponse(data: any): void {
         for (const paginator in this._paginators) {
             if (this._paginators[paginator].type === 'paginator') {
-                const paginatorInfo = scope(data.data, paginator).paginatorInfo;
+                const paginatorInfo = scope(data, paginator).paginatorInfo;
                 this._paginators[paginator].pagination = {
                     currentPage: paginatorInfo.currentPage,
                     lastPage: paginatorInfo.lastPage

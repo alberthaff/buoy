@@ -1,4 +1,5 @@
 import { HttpHeaders } from '@angular/common/http';
+import { PusherDriver } from './operations/subscription/drivers/pusher/pusher-driver';
 
 export class BuoyConfig {
     /**
@@ -11,6 +12,11 @@ export class BuoyConfig {
      * that will be used to add custom headers on all requests.
      */
     headers?: () => HttpHeaders; // TODO: Add parameters
+
+    /**
+     * Should cookies be included in HTTP-requests?
+     */
+    withCredentials: boolean;
 
     /**
      * Would you like to add any custom extensions to the requests? Define a callback,
@@ -26,7 +32,7 @@ export class BuoyConfig {
     /**
      * Would you like to subscribe to changes server-side?
      */
-    subscriptions?: any;
+    subscriptions?: PusherDriver;
 
     /**
      * Which type of paginators does the GraphQL server use as a default?

@@ -76,10 +76,10 @@ export class Buoy {
     }
 
     /**
-     * Subscribe to changes server-side.
+     * Subscribe to server-side events.
      */
     public subscribe(subscription, variables?: any, options?: SubscriptionOptions): Subscription {
-        return new Subscription(subscription, variables, options);
+        return new Subscription(this, operationId++, subscription, variables, options);
     }
 
     public get config(): BuoyConfig {

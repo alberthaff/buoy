@@ -2,13 +2,13 @@ import { QueryOptions } from '../query/query-options';
 import { ActivatedRoute, Router } from '@angular/router';
 
 export interface WatchQueryOptions extends QueryOptions {
-    subscribe?: boolean;     // TODO: gql type
     pagination?: false | string | any;    // TODO
     router?: {
         router: Router,
         route: ActivatedRoute;
     };
     fetch?: boolean;
+    subscribe?: string;
 
     // Callbacks
     onInitialized?: (id: number) => void;

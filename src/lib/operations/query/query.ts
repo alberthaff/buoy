@@ -34,37 +34,36 @@ export class Query extends Operation {
                 fetchResults: true
             }).toPromise().then(
                 (response) => {
-                if (typeof response.errors === 'undefined') {
-                    response.errors = [];
-                }
-
-                for (const error of response.errors) {
-                    if (error.extensions.category === 'graphql') {
-                        throw new Error(
-                            '[Buoy :: GraphQL error]: ${error.message}, on line ' +
-                            `${error.locations[0].line}:${error.locations[0].column}.`,
-                        );
+                    if (typeof response.errors === 'undefined') {
+                        response.errors = [];
                     }
-                }
 
-                if (response.errors.length === 0) {
-                    resolve(new QueryResult(this.mapResponse(response)));
-                } else {
-                    reject(new QueryError(response.data ? response.data : null, ''));
-                }
-            },
-            (error) => {
-                throw new Error(error);
-                reject(new QueryError(
-                    null,
-                    {
-                        // graphQl: error.graphQLErrors,
-                        // network: error.networkError,
-                        data: {},
-                        extensions: {}
+                    for (const error of response.errors) {
+                        if (error.extensions.category === 'graphql') {
+                            this.operationError(error);
+                        }
                     }
-                ));
-            });
+
+                    if (response.errors.length === 0) {
+                        resolve(new QueryResult(this.mapResponse(response)));
+                    } else {
+                        reject(new QueryError(response.data ? response.data : null, ''));
+                    }
+                },
+                (error) => {
+                    console.log('BUOY ERROR', error);
+                    throw new Error(error);
+                    reject(new QueryError(
+                        null,
+                        {
+                            // graphQl: error.graphQLErrors,
+                            // network: error.networkError,
+                            data: {},
+                            extensions: {}
+                        }
+                    ));
+                }
+            );
         });
     }
 

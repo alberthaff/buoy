@@ -16,6 +16,10 @@ export * from './lib/operations/mutation/mutation';
 export * from './lib/operations/mutation/mutation-options';
 export * from './lib/operations/mutation/mutation-result';
 export * from './lib/operations/mutation/mutation-error';
+export * from './lib/operations/subscription/subscription';
+export * from './lib/operations/subscription/subscription-options';
+export * from './lib/operations/subscription/drivers/pusher/pusher-driver';
+export * from './lib/operations/subscription/drivers/pusher/pusher-driver-options';
 
 export * from './lib/middleware/header-manipulator';
 export * from './lib/middleware/query-manipulator';
